@@ -229,6 +229,9 @@ export default function Home() {
 
   // Helper to generate proxy download url
   const getDownloadUrl = (url: string) => {
+    if (url.startsWith('data:')) {
+      return url;
+    }
     return `/api/proxy-image?url=${encodeURIComponent(url)}`;
   };
 

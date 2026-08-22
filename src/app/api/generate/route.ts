@@ -23,86 +23,106 @@ export async function POST(req: Request) {
 
     const openai = new OpenAI({ apiKey });
 
-    let response;
-    try {
-      const apiOptions: any = {
-        model: 'dall-e-3',
+    // Dynamic configuration mapper for different image models
+    const buildOptions = (targetModel: string) => {
+      const options: any = {
+        model: targetModel,
         prompt,
         n: 1,
         size: size as any,
       };
 
-      // Only include optional parameters if they are supported by the gateway/version
-      if (quality) {
-        apiOptions.quality = quality as any;
+      if (targetModel.startsWith('gpt-image') || targetModel.startsWith('chatgpt-image')) {
+        // gpt-image models support quality: 'low', 'medium', 'high', 'auto'. style is not supported.
+        if (quality === 'hd') {
+          options.quality = 'high';
+        } else {
+          options.quality = 'auto'; // default to auto for general usage
+        }
+      } else {
+        // dall-e models support quality: 'standard', 'hd', style: 'vivid', 'natural'
+        if (quality) {
+          options.quality = quality as any;
+        }
+        if (style) {
+          options.style = style as any;
+        }
       }
-      if (style) {
-        apiOptions.style = style as any;
-      }
+      return options;
+    };
 
-      response = await openai.images.generate(apiOptions);
+    let response;
+    let usedModel = 'gpt-image-2';
+
+    try {
+      console.log(`Attempting generation with primary model: ${usedModel}`);
+      response = await openai.images.generate(buildOptions(usedModel));
     } catch (firstError: any) {
-      console.warn('Initial DALL-E 3 generation failed, attempting parameter fallback...', firstError?.message || firstError);
-      
+      console.warn(`Primary model ${usedModel} generation failed, checking fallback models...`, firstError?.message || firstError);
       const errText = String(firstError?.error?.message || firstError?.message || '').toLowerCase();
-      
-      // If error is related to parameters like style or quality, retry without them
-      if (errText.includes('style') || errText.includes('quality') || errText.includes('parameter') || errText.includes('unknown')) {
+
+      // If the error indicates that the model 'gpt-image-2' does not exist or isn't accessible, try fallback models
+      if (errText.includes('model') || errText.includes('not found') || errText.includes('access') || errText.includes('permission')) {
         try {
-          response = await openai.images.generate({
-            model: 'dall-e-3',
-            prompt,
-            n: 1,
-            size: size as any,
-          });
+          usedModel = 'chatgpt-image-latest';
+          console.log(`Fallback: Attempting generation with model: ${usedModel}`);
+          response = await openai.images.generate(buildOptions(usedModel));
         } catch (secondError: any) {
-          console.warn('Fallback DALL-E 3 generation failed, checking for DALL-E 2 fallback...', secondError?.message || secondError);
-          const secondErrText = String(secondError?.error?.message || secondError?.message || '').toLowerCase();
-          
-          if (secondErrText.includes('model') || secondErrText.includes('not found') || secondErrText.includes('access') || secondErrText.includes('permission')) {
-            // Fallback to DALL-E 2
-            response = await openai.images.generate({
-              model: 'dall-e-2',
-              prompt,
-              n: 1,
-              size: '1024x1024',
-            });
-          } else {
-            throw secondError;
+          console.warn(`Fallback model ${usedModel} failed, trying DALL-E 3...`, secondError?.message || secondError);
+          try {
+            usedModel = 'dall-e-3';
+            console.log(`Fallback: Attempting generation with model: ${usedModel}`);
+            response = await openai.images.generate(buildOptions(usedModel));
+          } catch (thirdError: any) {
+            console.warn(`DALL-E 3 generation failed, checking DALL-E 2...`, thirdError?.message || thirdError);
+            const thirdErrText = String(thirdError?.error?.message || thirdError?.message || '').toLowerCase();
+
+            // Try DALL-E 2 as a final resort
+            try {
+              usedModel = 'dall-e-2';
+              console.log(`Fallback: Attempting generation with final model: ${usedModel}`);
+              // DALL-E 2 only supports square format, so reset size
+              response = await openai.images.generate({
+                model: 'dall-e-2',
+                prompt,
+                n: 1,
+                size: '1024x1024',
+              });
+            } catch (finalError: any) {
+              console.error('All image generation models failed.');
+              throw finalError;
+            }
           }
         }
-      } else if (errText.includes('model') || errText.includes('not found') || errText.includes('access') || errText.includes('permission')) {
-        // Fallback to DALL-E 2 directly
-        response = await openai.images.generate({
-          model: 'dall-e-2',
-          prompt,
-          n: 1,
-          size: '1024x1024',
-        });
       } else {
+        // If it was some other error (e.g. safety block, invalid prompt, etc.), throw it
         throw firstError;
       }
     }
 
     const imageData = response?.data && response.data.length > 0 ? response.data[0] : null;
-    const imageUrl = imageData?.url;
+    let imageUrl = imageData?.url;
     const revisedPrompt = imageData?.revised_prompt;
+
+    // Handle models that return base64 data instead of remote URLs
+    if (!imageUrl && imageData?.b64_json) {
+      imageUrl = `data:image/png;base64,${imageData.b64_json}`;
+    }
 
     if (!imageUrl) {
       return NextResponse.json(
-        { error: 'Failed to generate image. No URL returned from OpenAI.' },
+        { error: `Failed to generate image. No URL or base64 data returned from model '${usedModel}'.` },
         { status: 500 }
       );
     }
 
     return NextResponse.json({
       imageUrl,
-      revisedPrompt,
+      revisedPrompt: revisedPrompt || `Generated using model: ${usedModel}`,
     });
   } catch (error: any) {
     console.error('Error generating image:', error);
     
-    // Attempt to extract structured error message from OpenAI SDK error
     const errorMessage = error?.error?.message || error?.message || 'An error occurred during image generation.';
     const status = error?.status || 500;
 
