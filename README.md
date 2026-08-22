@@ -69,3 +69,8 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 - **[`src/app/api/generate/route.ts`](file:///D:/Palwinder/text-to-image-generator/src/app/api/generate/route.ts)**: API handler querying OpenAI with fallback routing.
 - **[`src/app/api/proxy-image/route.ts`](file:///D:/Palwinder/text-to-image-generator/src/app/api/proxy-image/route.ts)**: Endpoint to proxy remote URLs for seamless CORS-free downloads.
 - **[`src/app/globals.css`](file:///D:/Palwinder/text-to-image-generator/src/app/globals.css)**: Tailwind style definitions with custom dark colors.
+
+
+---
+
+**Built by [Palwinder Singh](https://github.com/PalwinderSinghPaali)**
