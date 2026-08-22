@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ImagiCraft AI - Step-by-Step Setup Guide</title>
+  <!-- Tailwind CSS for styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @media print {
+      body {
+        font-size: 12pt;
+        color: #1a1a1a;
+      }
+      .no-print {
+        display: none;
+      }
+      .page-break {
+        page-break-before: always;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans leading-relaxed">
+  
+  <!-- Container -->
+  <div class="max-w-4xl mx-auto my-10 p-8 bg-white shadow-lg rounded-xl border border-slate-200">
+    
+    <!-- Title Header -->
+    <header class="border-b-2 border-indigo-650 pb-6 mb-8 text-center">
+      <h1 class="text-3xl font-extrabold text-indigo-700 uppercase tracking-tight">ImagiCraft AI</h1>
+      <p class="text-lg text-slate-500 mt-2 font-medium">Complete Step-by-Step Project Setup & Billing Guide</p>
+    </header>
+
+    <!-- Project Info Card -->
+    <div class="mb-8 p-4 bg-indigo-50 border-l-4 border-indigo-500 rounded-r-lg">
+      <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider block mb-1">GitHub Code Repository</span>
+      <a href="https://github.com/PalwinderSinghPaali/ImagiCraft-AI.git" class="text-indigo-750 font-semibold underline break-all">
+        https://github.com/PalwinderSinghPaali/ImagiCraft-AI.git
+      </a>
+    </div>
+
+    <!-- Step 1: Installing the Application -->
+    <section class="mb-10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="bg-indigo-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">1</div>
+        <h2 class="text-xl font-bold text-slate-905">Installing the Application</h2>
+      </div>
+      <div class="pl-11">
+        <p class="mb-3">To set up the project locally on your machine, follow these commands in your terminal:</p>
+        <div class="bg-slate-900 text-slate-200 p-4 rounded-lg font-mono text-sm mb-4">
+          <p class="text-indigo-400"># 1. Clone the repository</p>
+          <p>git clone https://github.com/PalwinderSinghPaali/ImagiCraft-AI.git</p>
+          <p class="mt-2">cd ImagiCraft-AI</p>
+          <p class="text-indigo-400 mt-3"># 2. Install required dependencies</p>
+          <p>npm install</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 2: Creating an OpenAI API Key -->
+    <section class="mb-10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="bg-indigo-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">2</div>
+        <h2 class="text-xl font-bold text-slate-905">Obtaining an OpenAI API Key</h2>
+      </div>
+      <div class="pl-11 space-y-3">
+        <p>In order for the application to generate images, you need to configure an OpenAI API key on your server:</p>
+        <ol class="list-decimal list-inside space-y-2 pl-2">
+          <li>Navigate to the <a href="https://platform.openai.com/" class="text-indigo-600 font-semibold underline">OpenAI Developer Platform</a>.</li>
+          <li>Log in or register for a developer account.</li>
+          <li>Go to the <strong>API Keys</strong> section from the left navigation panel (or visit <a href="https://platform.openai.com/api-keys" class="text-indigo-600 font-semibold underline">platform.openai.com/api-keys</a>).</li>
+          <li>Click the <strong>"Create new secret key"</strong> button.</li>
+          <li>Provide a name for the key (e.g., <code>ImagiCraft AI</code>) and click <strong>Create</strong>.</li>
+          <li>Copy the generated secret key immediately. <em>(Note: You will not be able to view it again once the modal is closed).</em></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Step 3: Adding Credits on the OpenAI Platform -->
+    <section class="mb-10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="bg-indigo-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">3</div>
+        <h2 class="text-xl font-bold text-slate-905">Adding Billing Credits to OpenAI</h2>
+      </div>
+      <div class="pl-11 space-y-3">
+        <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg text-amber-900 mb-3 text-sm">
+          <strong>Important Note:</strong> API usage is billed separately from consumer ChatGPT Plus subscriptions. You must add credit balances directly to your developer account API billing, even if you are already a paying ChatGPT Plus user.
+        </div>
+        <p>Follow these steps to add credit balance to your account:</p>
+        <ol class="list-decimal list-inside space-y-2 pl-2">
+          <li>Go to the <strong>Billing Dashboard</strong> at <a href="https://platform.openai.com/settings/organization/billing" class="text-indigo-600 font-semibold underline">platform.openai.com/settings/organization/billing</a>.</li>
+          <li>Click on <strong>"Add to credit balance"</strong> or <strong>"Purchase credits"</strong>.</li>
+          <li>Enter the amount of credits you wish to add (minimum $5 USD).</li>
+          <li>Enter your credit card or payment billing details and complete the transaction.</li>
+          <li>Make sure your credit balance reflects the added amount so your API requests are authorized.</li>
+        </ol>
+      </div>
+    </section>
+
+    <div class="page-break"></div>
+
+    <!-- Step 4: Configuring and Running the App -->
+    <section class="mb-10 pt-6">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="bg-indigo-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">4</div>
+        <h2 class="text-xl font-bold text-slate-905">Configuring Environment & Starting the Server</h2>
+      </div>
+      <div class="pl-11 space-y-3">
+        <p>1. Copy the example environment file inside your root directory:</p>
+        <div class="bg-slate-900 text-slate-200 p-3 rounded-lg font-mono text-sm">
+          cp .env.local.example .env.local
+        </div>
+        <p>2. Open <code>.env.local</code> and add your OpenAI API Key:</p>
+        <div class="bg-slate-900 text-slate-200 p-3 rounded-lg font-mono text-sm">
+          OPENAI_API_KEY=sk-proj-yourOpenAiApiKeyHere...
+        </div>
+        <p>3. Launch the development server:</p>
+        <div class="bg-slate-900 text-slate-200 p-3 rounded-lg font-mono text-sm">
+          npm run dev
+        </div>
+        <p>4. Open your browser and navigate to <a href="http://localhost:3000" class="text-indigo-600 font-semibold underline">http://localhost:3000</a>.</p>
+      </div>
+    </section>
+
+    <!-- Step 5: User Interface -->
+    <section class="mb-10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="bg-indigo-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">5</div>
+        <h2 class="text-xl font-bold text-slate-905">Application Dashboard User Interface</h2>
+      </div>
+      <div class="pl-11">
+        <p class="mb-4">The ImagiCraft AI dashboard includes style presets, image dimensions, quality profiles, rendering style, generating animation state, and locally cached history:</p>
+        <div class="border border-slate-200 rounded-lg overflow-hidden bg-slate-900 p-2 shadow-md">
+          <img src="file:///D:/Palwinder/text-to-image-generator/image.png" alt="User Interface" class="w-full h-auto object-cover">
+        </div>
+      </div>
+    </section>
+
+    <div class="page-break"></div>
+
+    <!-- Step 6: Example Generation -->
+    <section class="mb-10 pt-6">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="bg-indigo-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">6</div>
+        <h2 class="text-xl font-bold text-slate-905">Example Generated Output</h2>
+      </div>
+      <div class="pl-11 space-y-4">
+        <div>
+          <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider block mb-1">Example Prompt Tested</span>
+          <p class="p-4 bg-slate-100 rounded-lg italic text-slate-700 border-l-4 border-indigo-400 text-sm">
+            "Generate an image where Lion is doing coding on laptop with natural wild life background, Make sure laptop screen is in correct order. Right now in generated image , screen is changed to opposite side. Angle it in such a way that laptop screen with coding on it is visible and seems realistic. And Lion watching that screen. with hands on laptop"
+          </p>
+        </div>
+        <div>
+          <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider block mb-2">Resulting Image Output (DALL-E / gpt-image-2)</span>
+          <div class="border border-slate-200 rounded-lg overflow-hidden bg-slate-900 p-2 shadow-md max-w-lg mx-auto">
+            <img src="file:///D:/Palwinder/text-to-image-generator/generated-image.png" alt="Generated Coding Lion" class="w-full h-auto object-cover">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 pt-6 mt-8 text-center text-xs text-slate-400">
+      <p>ImagiCraft AI — Designed & Developed by Palwinder Singh Paali</p>
+      <p class="mt-1">Generated dynamically via Headless Print-to-PDF Engine</p>
+    </footer>
+
+  </div>
+
+</body>
+</html>
